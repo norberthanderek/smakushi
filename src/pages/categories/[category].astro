@@ -1,0 +1,48 @@
+---
+import PageLayout from '../../components/PageLayout.astro';
+import RecipeCard from '../../components/RecipeCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import RecipeGrid from '../../components/RecipeGrid.astro';
+import { getAllRecipes, extractCategories, filterRecipesByCategory, slugifyCategory, getCategoryBySlug } from '../../utils/recipeHelpers';
+import { pluralize } from '../../utils/pluralize';
+
+export async function getStaticPaths() {
+  const allRecipes = await getAllRecipes();
+  const categories = extractCategories(allRecipes);
+
+  return categories.map(category => ({
+    params: { category: slugifyCategory(category) },
+    props: {
+      recipes: filterRecipesByCategory(allRecipes, slugifyCategory(category)),
+      categoryName: category,
+    },
+  }));
+}
+
+const { category } = Astro.params;
+const { recipes, categoryName } = Astro.props;
+const capitalizedCategory = categoryName ? categoryName.charAt(0).toUpperCase() + categoryName.slice(1) : '';
+---
+
+<PageLayout title={`${capitalizedCategory} Recipes`}>
+  <Breadcrumbs items={[
+    { label: 'Główna', href: '/' },
+    { label: 'Kategorie', href: '/categories' },
+    { label: capitalizedCategory }
+  ]} />
+
+  <div class="mb-10">
+    <h1 class="text-5xl font-bold mb-2 capitalize text-secondary">{categoryName}</h1>
+    <p class="text-lg text-base-content/60">
+      {recipes.length} {pluralize(recipes.length, 'recipe')} w tej kategorii
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <RecipeGrid>
+    {recipes.map((recipe) => (
+      <RecipeCard recipe={recipe} />
+    ))}
+  </RecipeGrid>
+</PageLayout>

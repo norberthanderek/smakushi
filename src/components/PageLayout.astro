@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from './Navbar.astro';
+import SearchModal from './SearchModal.astro';
+import Footer from './Footer.astro';
+
+export interface Props {
+  title: string;
+  maxWidth?: 'max-w-5xl' | 'max-w-7xl';
+}
+
+const { title, maxWidth = 'max-w-7xl' } = Astro.props;
+---
+
+<BaseLayout title={title}>
+  <Navbar />
+  <SearchModal />
+  <main class={`flex-1 container mx-auto px-4 py-8 ${maxWidth}`}>
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>

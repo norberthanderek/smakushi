@@ -1,0 +1,26 @@
+---
+export interface Props {
+  title: string;
+  count?: number;
+  countLabel?: string;
+  class?: string;
+}
+
+const { title, count, countLabel, class: className = '' } = Astro.props;
+---
+
+<div class={`flex justify-between items-center mb-8 ${className}`}>
+  <h1 class="text-5xl font-bold text-secondary">{title}</h1>
+  {count !== undefined && countLabel && (
+    <div class="pr-3 pt-3">
+      <div class="indicator">
+        <span class="indicator-item indicator-top indicator-end badge badge-accent">
+          {count}
+        </span>
+        <div class="badge badge-soft badge-lg badge-accent px-6">
+          {countLabel}
+        </div>
+      </div>
+    </div>
+  )}
+</div>

@@ -1,0 +1,43 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Discover and share delicious recipes' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="pastel">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Smakushi</title>
+  </head>
+  <body class="bg-base-100">
+    <div class="drawer">
+      <input id="main-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col min-h-screen">
+        <slot />
+      </div>
+      <div class="drawer-side">
+        <label for="main-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+        <ul class="menu bg-base-100/80 backdrop-blur-md min-h-full w-80 p-4 shadow-lg">
+          <li class="mb-4">
+            <a href="/" class="text-xl font-bold text-secondary gap-2">
+              Smakushi
+            </a>
+          </li>
+          <div class="divider"></div>
+          <li><a href="/">Główna</a></li>
+          <li><a href="/categories">Kategorie</a></li>
+          <li><a href="/recipes">Wszystkie przepisy</a></li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

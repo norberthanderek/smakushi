@@ -1,0 +1,37 @@
+---
+import PageLayout from '../../components/PageLayout.astro';
+import RecipeCard from '../../components/RecipeCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Alert from '../../components/Alert.astro';
+import RecipeGrid from '../../components/RecipeGrid.astro';
+import { getAllRecipes } from '../../utils/recipeHelpers';
+import { pluralize } from '../../utils/pluralize';
+
+const allRecipes = await getAllRecipes();
+---
+
+<PageLayout title="Wszystkie przepisy">
+  <Breadcrumbs items={[
+    { label: 'Główna', href: '/' },
+    { label: 'Wszystkie przepisy' }
+  ]} />
+
+  <div class="mb-10">
+    <h1 class="text-5xl font-bold mb-2 text-secondary">Wszystkie przepisy</h1>
+    <p class="text-lg text-base-content/60">
+      {allRecipes.length} {pluralize(allRecipes.length, 'recipe')}
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  {allRecipes.length === 0 ? (
+    <Alert message="Brak dostępnych przepisów." />
+  ) : (
+    <RecipeGrid>
+      {allRecipes.map((recipe) => (
+        <RecipeCard recipe={recipe} />
+      ))}
+    </RecipeGrid>
+  )}
+</PageLayout>

@@ -1,0 +1,16 @@
+---
+import { getDifficultyColor, getDifficultyLabel, type Difficulty } from '../utils/difficultyConfig';
+
+export interface Props {
+  difficulty: Difficulty;
+  class?: string;
+}
+
+const { difficulty, class: className = '' } = Astro.props;
+const color = getDifficultyColor(difficulty);
+const label = getDifficultyLabel(difficulty);
+---
+
+<div class={`badge ${color} ${className}`}>
+  {label}
+</div>

@@ -1,0 +1,13 @@
+---
+export interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`card bg-base-200 shadow-sm ${className}`}>
+  <div class="card-body">
+    <slot />
+  </div>
+</div>

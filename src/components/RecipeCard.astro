@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import DifficultyBadge from './DifficultyBadge.astro';
+import ImagePlaceholder from './ImagePlaceholder.astro';
+import { pluralize } from '../utils/pluralize';
+
+interface Props {
+  recipe: CollectionEntry<'recipes'>;
+}
+
+const { recipe } = Astro.props;
+const { title, description, thumbnail, timeEstimate, prepTime, cookTime, portions, difficulty, categories, nutritionalInfo } = recipe.data;
+
+const formatCookTime = (minutes: number) => {
+  if (minutes >= 60) {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
+  }
+  return `${minutes}min`;
+};
+
+const displayTime = prepTime && cookTime
+  ? `${prepTime}min + ${formatCookTime(cookTime)}`
+  : timeEstimate
+    ? `${timeEstimate} min`
+    : '';
+---
+
+<a
+  href={`/recipes/${recipe.slug}`}
+  class="card bg-base-100 shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] cursor-pointer"
+>
+  <figure>
+    {thumbnail ? (
+      <Image
+        src={thumbnail}
+        alt={title}
+        width={400}
+        height={250}
+        class="w-full h-[250px] object-cover"
+        loading="lazy"
+      />
+    ) : (
+      <ImagePlaceholder width="400" height="250" class="w-full bg-base-200" />
+    )}
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title text-lg">
+      {title}
+      <DifficultyBadge difficulty={difficulty} class="badge-sm" />
+    </h2>
+    <p class="text-sm text-base-content/70 line-clamp-2">{description}</p>
+    <div class="flex gap-2 flex-wrap my-2">
+      {categories.slice(0, 3).map((category) => (
+        <span class="badge badge-soft badge-sm capitalize">{category}</span>
+      ))}
+    </div>
+    <div class="flex gap-4 text-xs text-base-content/60 mt-2">
+      <div class="flex items-center gap-1">
+        <Icon name="clock" class="h-4 w-4" />
+        <span>{displayTime}</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <Icon name="people" class="h-4 w-4" />
+        <span>{portions} {pluralize(portions, 'portion')}</span>
+      </div>
+      {nutritionalInfo?.calories && (
+        <div class="flex items-center gap-1">
+          <Icon name="chart" class="h-4 w-4" />
+          <span>{nutritionalInfo.calories} kcal</span>
+        </div>
+      )}
+    </div>
+  </div>
+</a>

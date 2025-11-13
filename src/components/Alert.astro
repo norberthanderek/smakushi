@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+
+export interface Props {
+  type?: 'info' | 'success' | 'warning' | 'error';
+  message: string;
+  class?: string;
+}
+
+const { type = 'info', message, class: className = '' } = Astro.props;
+---
+
+<div class={`alert alert-${type} ${className}`}>
+  <Icon name="info" class="stroke-current shrink-0 w-6 h-6" />
+  <span>{message}</span>
+</div>

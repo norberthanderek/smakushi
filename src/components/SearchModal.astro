@@ -1,0 +1,158 @@
+---
+import { getCollection } from 'astro:content';
+
+const allRecipes = await getCollection('recipes', ({ id }) => {
+  return !id.startsWith('.');
+});
+const recipesData = allRecipes.map(recipe => ({
+  slug: recipe.slug,
+  title: recipe.data.title,
+  description: recipe.data.description,
+  categories: recipe.data.categories,
+  tags: recipe.data.tags || [],
+}));
+---
+
+<dialog id="search_modal" class="modal">
+  <div class="modal-box relative max-w-4xl p-0 h-[85vh] md:h-[70vh] md:w-11/12 bg-base-100/80 backdrop-blur-md"
+    <div class="rounded-box h-full overflow-y-auto [scrollbar-width:thin] flex flex-col" style="scroll-padding-top: 3.5rem;">
+      <label class="input input-lg lg:input-xl bg-base-100/80 backdrop-blur-md border-base-300 sticky top-0 z-10 w-full rounded-none border-0 border-b shadow-none focus-within:shadow-none focus-within:outline-none lg:px-6">
+        <svg class="size-5 shrink-0 opacity-30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+          <g fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.96544 11.0261C9.13578 11.6382 8.11014 12 7 12C4.23858 12 2 9.76142 2 7C2 4.23858 4.23858 2 7 2C9.76142 2 12 4.23858 12 7C12 8.11014 11.6382 9.13578 11.0261 9.96544L13.7803 12.7197C14.0732 13.0126 14.0732 13.4874 13.7803 13.7803C13.4874 14.0732 13.0126 14.0732 12.7197 13.7803L9.96544 11.0261ZM10.5 7C10.5 8.933 8.933 10.5 7 10.5C5.067 10.5 3.5 8.933 3.5 7C3.5 5.067 5.067 3.5 7 3.5C8.933 3.5 10.5 5.067 10.5 7Z" fill="currentColor"></path>
+          </g>
+        </svg>
+        <input
+          id="search_input"
+          type="text"
+          autocomplete="off"
+          placeholder="Szukaj według nazwy przepisu, kategorii lub tagu..."
+        />
+      </label>
+
+      <div class="flex-1 flex items-center justify-center">
+        <div id="search_results" class="w-full">
+          <div class="text-center py-8">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-16 mx-auto mb-4 opacity-40 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <div class="min-h-[3rem]">
+              <p class="text-sm text-base-content/60">Wpisz tekst, aby wyszukać przepisy...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+
+<script define:vars={{ recipesData }}>
+  const searchInput = document.getElementById('search_input');
+  const searchResults = document.getElementById('search_results');
+  const searchModal = document.getElementById('search_modal');
+  const resultsContainer = searchResults.parentElement;
+
+  const emptyState = `
+    <div class="text-center py-8">
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-16 mx-auto mb-4 opacity-40 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <div class="min-h-[3rem]">
+        <p class="text-sm text-base-content/60">Wpisz tekst, aby wyszukać przepisy...</p>
+      </div>
+    </div>
+  `;
+
+  function showEmptyState() {
+    resultsContainer.classList.add('flex-1', 'flex', 'items-center', 'justify-center');
+    searchResults.innerHTML = emptyState;
+  }
+
+  function performSearch(query) {
+    if (!query || query.length < 2) {
+      showEmptyState();
+      return;
+    }
+
+    resultsContainer.classList.add('flex-1', 'flex', 'items-center', 'justify-center');
+    searchResults.innerHTML = `
+      <div class="text-center py-8">
+        <svg class="size-16 mx-auto mb-4 opacity-40 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="15"/>
+        </svg>
+        <div class="min-h-[3rem]">
+          <p class="text-sm text-base-content/60">Wyszukiwanie...</p>
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => {
+      const lowerQuery = query.toLowerCase();
+      const results = recipesData.filter(recipe => {
+        return (
+          recipe.title.toLowerCase().includes(lowerQuery) ||
+          recipe.description.toLowerCase().includes(lowerQuery) ||
+          recipe.categories.some(cat => cat.toLowerCase().includes(lowerQuery)) ||
+          recipe.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+        );
+      });
+
+      if (results.length === 0) {
+        resultsContainer.classList.add('flex-1', 'flex', 'items-center', 'justify-center');
+        searchResults.innerHTML = `
+          <div class="text-center py-8">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-16 mx-auto mb-4 opacity-40 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div class="min-h-[3rem]">
+              <p class="text-sm text-base-content/60">Nie znaleziono przepisów</p>
+              <p class="text-sm text-base-content/60 mt-1">Spróbuj innego słowa</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // Remove centering classes from parent when showing results
+      resultsContainer.classList.remove('flex-1', 'flex', 'items-center', 'justify-center');
+
+      searchResults.innerHTML = results.map(recipe => `
+        <a href="/recipes/${recipe.slug}" class="block border-b border-base-300 px-4 py-3 hover:bg-base-200/50 hover:shadow-md transition-all duration-200 lg:px-6">
+          <h4 class="font-semibold text-base lg:text-lg mb-1">${recipe.title}</h4>
+          <p class="text-sm text-base-content/70 mb-2">${recipe.description}</p>
+          <div class="flex gap-2 flex-wrap">
+            ${recipe.categories.map(cat => `<span class="badge badge-sm badge-accent">${cat}</span>`).join('')}
+          </div>
+        </a>
+      `).join('');
+    }, 200);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      performSearch(e.target.value);
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        searchModal.close();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      searchModal.showModal();
+      setTimeout(() => searchInput?.focus(), 100);
+    }
+  });
+
+  searchModal?.addEventListener('close', () => {
+    searchInput.value = '';
+    showEmptyState();
+  });
+</script>

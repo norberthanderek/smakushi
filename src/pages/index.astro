@@ -1,0 +1,72 @@
+---
+import PageLayout from '../components/PageLayout.astro';
+import RecipeCard from '../components/RecipeCard.astro';
+import Icon from '../components/Icon.astro';
+import Alert from '../components/Alert.astro';
+import RecipeGrid from '../components/RecipeGrid.astro';
+import { getAllRecipes, extractCategories, slugifyCategory } from '../utils/recipeHelpers';
+
+const allRecipes = await getAllRecipes();
+const featuredRecipes = allRecipes.filter(recipe => recipe.data.featured);
+const allCategories = extractCategories(allRecipes);
+---
+
+<PageLayout title="Strona główna">
+  <div class="hero min-h-[500px] mb-16">
+      <div class="hero-content text-center">
+        <div class="max-w-2xl">
+          <h1 class="text-6xl font-bold mb-6 text-secondary">
+            Witaj w Smakushi
+          </h1>
+          <p class="text-xl mb-8">
+            Odkryj przepisy tworzone przez bliskich.
+          </p>
+          <div class="flex gap-4 justify-center flex-wrap">
+            <a href="/recipes" class="btn btn-secondary btn-lg">
+              Przeglądaj wszystkie
+              <Icon name="arrow-right" class="h-5 w-5" />
+            </a>
+            <button onclick="search_modal.showModal()" class="btn btn-secondary btn-lg">
+              <Icon name="search" class="h-5 w-5" />
+              Szybkie wyszukiwanie
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider text-xl font-bold">Kategorie</div>
+
+    <section class="mb-16">
+      <h2 class="text-4xl font-bold mb-8">Przeglądaj według kategorii</h2>
+      <div class="flex flex-wrap gap-3">
+        {allCategories.map((category) => (
+          <a href={`/categories/${slugifyCategory(category)}`} class="btn btn-soft btn-secondary capitalize">
+            {category}
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <div class="divider text-xl font-bold">Wyróżnione</div>
+
+    <section>
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-4xl font-bold">Wyróżnione przepisy</h2>
+        <a href="/recipes" class="btn btn-ghost">
+          Zobacz wszystkie
+          <Icon name="arrow-right" class="h-5 w-5" />
+        </a>
+      </div>
+
+      {featuredRecipes.length === 0 ? (
+        <Alert message="Nie ma jeszcze wyróżnionych przepisów. Sprawdź wkrótce!" />
+      ) : (
+        <RecipeGrid>
+          {featuredRecipes.map((recipe) => (
+            <RecipeCard recipe={recipe} />
+          ))}
+        </RecipeGrid>
+      )}
+    </section>
+</PageLayout>

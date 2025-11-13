@@ -1,0 +1,23 @@
+{
+  "name": "smakushi-daisy",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.15.4",
+    "sharp": "^0.34.5",
+    "slugify": "^1.6.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.17",
+    "autoprefixer": "^10.4.21",
+    "daisyui": "^5.4.7",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17"
+  }
+}

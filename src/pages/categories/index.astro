@@ -1,0 +1,39 @@
+---
+import PageLayout from '../../components/PageLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getAllRecipes, getCategoryCount, slugifyCategory } from '../../utils/recipeHelpers';
+import { pluralize } from '../../utils/pluralize';
+
+const allRecipes = await getAllRecipes();
+const categoryCounts = getCategoryCount(allRecipes);
+const categories = Array.from(categoryCounts.entries()).sort((a, b) => b[1] - a[1]);
+---
+
+<PageLayout title="Kategorie przepisów">
+  <Breadcrumbs items={[
+    { label: 'Główna', href: '/' },
+    { label: 'Kategorie' }
+  ]} />
+
+  <div class="mb-10">
+    <h1 class="text-5xl font-bold mb-4 text-secondary">Przeglądaj według kategorii</h1>
+    <p class="text-lg text-base-content/60">
+      Odkryj {categories.length} {pluralize(categories.length, 'category')} przepisów
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {categories.map(([category, count]) => (
+      <a href={`/categories/${slugifyCategory(category)}`} class="card bg-base-200 shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] cursor-pointer">
+        <div class="card-body">
+          <h2 class="card-title capitalize text-2xl">{category}</h2>
+          <p class="text-base-content/70 mt-2">
+            {count} {pluralize(count, 'recipe')}
+          </p>
+        </div>
+      </a>
+    ))}
+  </div>
+</PageLayout>
