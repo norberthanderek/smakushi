@@ -24,10 +24,9 @@ ingredients:
     amount: "do smaku"
 steps:
   - "Zacznij od ustawienia piekarnika na 150ºC, góra-dół."
-  - "Postaw patelnię na wysokim ogniu."
   - "Mięso pokrój na takie kawałki, które równomiernie wypełnią naczynie żaroodporne i nie będą miały zawiniętych fałd."
   - "Obtocz kawałki mięsa z każdej ze storn hojną dawką soli i pieprzu."
-  - "Przysmaż z każdej ze stron przez chwilę, do zamknięcia. Możesz równolegle przygotowywać cebule i czosnek."
+  - "Przysmaż z każdej ze stron na wysokim ogniu przez chwilę, do zamknięcia. Możesz równolegle przygotowywać cebule i czosnek."
   - "Przełóż mięso do naczynia żaroodpornego i zmniejsz ogień na patelni na niski."
   - "Drobno posiekaj cebule, wrzuć je na patelnie po czym dodaj zgnieciony czosnek. Mieszaj do zeszklenia."
   - "Przygotuj marynatę: do dużej miski wlej passatę i koncentrat, dodaj przprawy oraz cebulę z czosnkiem."

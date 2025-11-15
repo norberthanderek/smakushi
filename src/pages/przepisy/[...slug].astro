@@ -166,12 +166,10 @@ const schemas = [recipeSchema, breadcrumbSchema];
         )}
       </div>
 
-      <div class="divider text-lg font-bold">Wartości odżywcze</div>
+      <div class="divider text-lg font-bold">Wartości odżywcze na porcję</div>
 
       {nutritionalInfo && (
         <Card class="mb-10">
-          <h3 class="card-title text-2xl mb-4">Informacje żywieniowe</h3>
-          <p class="text-sm text-base-content/60 mb-4">Na porcję</p>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
             {nutritionalInfo.protein && (
               <div class="text-center p-4 bg-base-100 rounded-box">
@@ -198,11 +196,11 @@ const schemas = [recipeSchema, breadcrumbSchema];
         </Card>
       )}
 
-      <div class="divider text-lg font-bold">Szczegóły przepisu</div>
+      <div class="divider text-lg font-bold print-hidden">Szczegóły przepisu</div>
 
       <div class="grid lg:grid-cols-[fit-content(50%)_1fr] gap-8 mb-10">
         <Card>
-          <h3 class="card-title text-2xl mb-4">Składniki</h3>
+          <h3 class="card-title text-lg mb-4">Składniki</h3>
           <div class="overflow-x-auto">
             <table class="table">
               <tbody>
@@ -218,7 +216,7 @@ const schemas = [recipeSchema, breadcrumbSchema];
         </Card>
 
         <Card>
-          <h3 class="card-title text-2xl mb-6">Instrukcje</h3>
+          <h3 class="card-title text-lg mb-6 instructions-header">Instrukcje</h3>
           <ul class="timeline timeline-vertical timeline-compact">
             {steps.map((step, index) => (
               <li>
@@ -236,7 +234,7 @@ const schemas = [recipeSchema, breadcrumbSchema];
         </Card>
       </div>
 
-      <div class="divider text-lg font-bold">Dodatkowe informacje</div>
+      <div class="divider text-lg font-bold print-extra-margin">Dodatkowe informacje</div>
 
       <Card class="mb-10">
         <div class="prose prose-lg max-w-none">
@@ -260,7 +258,7 @@ const schemas = [recipeSchema, breadcrumbSchema];
             </svg>
             Drukuj
           </button>
-          <button class="btn btn-soft btn-primary join-item" onclick="navigator.share ? navigator.share({title: document.title, url: window.location.href}) : alert('Udostępnianie nie jest obsługiwane')">
+          <button id="share-btn" class="btn btn-soft btn-secondary join-item">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
             </svg>
@@ -269,6 +267,32 @@ const schemas = [recipeSchema, breadcrumbSchema];
         </div>
       </div>
     </article>
+
+    <!-- Toast notification -->
+    <div id="copy-toast" class="toast toast-bottom toast-center hidden z-[9999] print-hidden">
+      <div class="alert alert-success">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Link został skopiowany</span>
+      </div>
+    </div>
+
+    <script is:inline>
+      document.getElementById('share-btn').addEventListener('click', function() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+          const toast = document.getElementById('copy-toast');
+          toast.classList.remove('hidden');
+          setTimeout(() => {
+            toast.classList.add('hidden');
+          }, 3000);
+        }).catch((err) => {
+          console.error('Clipboard error:', err);
+          alert('Nie udało się skopiować linku');
+        });
+      });
+    </script>
   </main>
   <Footer />
 </BaseLayout>

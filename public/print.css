@@ -1,0 +1,414 @@
+/* Plik jest ładowany tylko dla print dzięki media="print" w linku */
+
+/* Marginesy na każdej stronie - mniejsze żeby nie było miejsca na browserowe header/footer */
+@page {
+  margin: 10mm 12mm;
+  size: A4;
+}
+
+body {
+  background: white !important;
+  color: black !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+  html {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: white !important;
+    background-color: white !important;
+  }
+
+  * {
+    -webkit-transition: none !important;
+    transition: none !important;
+    -webkit-animation: none !important;
+    animation: none !important;
+    border-radius: 0 !important;
+    color: black !important;
+  }
+
+  div, section, article, main, header {
+    display: block !important;
+  }
+
+  nav, footer, button, .btn, .breadcrumbs, .badge, .card-actions, figure, img, aside {
+    display: none !important;
+  }
+
+  footer, footer *, .footer, .footer * {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+  }
+
+  /* Ukryj wszystkie elementy drawer */
+  .drawer-side, .drawer-overlay, .drawer-toggle {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Wymuś brak tła na drawer */
+  .drawer, .drawer-content {
+    background: white !important;
+    background-color: white !important;
+  }
+
+  li, tr, h3 {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: visible !important;
+  }
+
+  li {
+    display: block !important;
+    position: relative !important;
+  }
+
+  main {
+    max-width: 100% !important;
+    padding: 5pt !important;
+    margin: 0 !important;
+  }
+
+  article {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  article > * {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .divider {
+    display: block !important;
+    height: auto !important;
+    border: none !important;
+    background: none !important;
+    margin: 4pt 0 3pt 0 !important;
+    padding: 0 !important;
+    font-size: 12pt !important;
+    font-weight: bold !important;
+    color: black !important;
+    text-align: left !important;
+  }
+
+  .divider::before, .divider::after {
+    display: none !important;
+  }
+
+  header {
+    margin-bottom: 4pt !important;
+    position: relative !important;
+  }
+
+  header h1 {
+    font-size: 20pt !important;
+    margin-bottom: 3pt !important;
+    color: black !important;
+    display: inline-block !important;
+    max-width: calc(100% - 80pt) !important;
+  }
+
+  header h1::after {
+    content: "smakushi.pl" !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    font-size: 12pt !important;
+    font-weight: normal !important;
+    color: #666 !important;
+  }
+
+  header p {
+    font-size: 11pt !important;
+    margin-bottom: 4pt !important;
+    color: black !important;
+  }
+
+  .stats {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12pt !important;
+    margin: 3pt 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  .stat {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  .stat-figure {
+    display: none !important;
+  }
+
+  .stat-title {
+    font-size: 9pt !important;
+    color: #666 !important;
+    margin-bottom: 2pt !important;
+  }
+
+  .stat-value {
+    font-size: 12pt !important;
+    font-weight: bold !important;
+    color: black !important;
+  }
+
+  .stat-desc {
+    font-size: 8pt !important;
+    color: #666 !important;
+    margin-top: 1pt !important;
+  }
+
+  .card {
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    margin-bottom: 8pt !important;
+  }
+
+  .card-body {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .card-title {
+    font-size: 12pt !important;
+    font-weight: bold !important;
+    margin-bottom: 6pt !important;
+    margin-top: 8pt !important;
+    color: black !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  .table {
+    width: auto !important;
+    max-width: 400pt !important;
+    border-collapse: collapse !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .overflow-x-auto {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .table tbody tr {
+    border-bottom: none !important;
+    background: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    display: table-row !important;
+  }
+
+  .table tbody {
+    display: table-row-group !important;
+  }
+
+  .table td {
+    padding: 2pt 0 !important;
+    font-size: 11pt !important;
+    color: black !important;
+    border: none !important;
+    display: table-cell !important;
+  }
+
+  .table td:first-child {
+    font-weight: normal !important;
+    padding-right: 30pt !important;
+    width: auto !important;
+  }
+
+  .table td:last-child {
+    text-align: left !important;
+    font-weight: normal !important;
+    width: auto !important;
+  }
+
+  .timeline {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    counter-reset: step-counter !important;
+    list-style: none !important;
+    overflow: visible !important;
+  }
+
+  .timeline li {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 8pt !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    counter-increment: step-counter !important;
+  }
+
+  .timeline-middle {
+    display: none !important;
+  }
+
+  .timeline-end {
+    display: block !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 11pt !important;
+    color: black !important;
+    line-height: 1.5 !important;
+  }
+
+  .timeline-end::before {
+    content: counter(step-counter) ". " !important;
+    font-weight: bold !important;
+  }
+
+  .timeline-box {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: block !important;
+  }
+
+  .timeline hr {
+    display: none !important;
+  }
+
+  .grid {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .grid > * {
+    margin-bottom: 10pt !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .grid-cols-2, .grid-cols-3 {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 12pt !important;
+    justify-content: flex-start !important;
+    margin: 8pt 0 !important;
+  }
+
+  .grid-cols-2 > div, .grid-cols-3 > div {
+    flex: 0 1 auto !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    text-align: left !important;
+    display: block !important;
+  }
+
+  .grid-cols-2 > div > div, .grid-cols-3 > div > div {
+    margin-bottom: 0 !important;
+    display: block !important;
+  }
+
+  .grid-cols-2 .text-sm, .grid-cols-3 .text-sm {
+    font-size: 9pt !important;
+    color: #666 !important;
+    margin-bottom: 2pt !important;
+    font-weight: normal !important;
+  }
+
+  .grid-cols-2 .text-2xl, .grid-cols-3 .text-2xl {
+    font-size: 12pt !important;
+    font-weight: bold !important;
+    color: black !important;
+  }
+
+  .grid-cols-2 .text-xs, .grid-cols-3 .text-xs {
+    font-size: 8pt !important;
+    color: #666 !important;
+    margin-top: 1pt !important;
+    font-weight: normal !important;
+  }
+
+  .prose {
+    font-size: 10pt !important;
+    color: black !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .max-w-none {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: black !important;
+    margin-top: 8pt !important;
+    margin-bottom: 4pt !important;
+    font-size: 12pt !important;
+  }
+
+  .prose p {
+    margin-bottom: 6pt !important;
+  }
+
+  .prose ul, .prose ol {
+    margin-left: 15pt !important;
+    margin-bottom: 6pt !important;
+  }
+
+  .prose li {
+    margin-bottom: 3pt !important;
+  }
+
+  .flex.flex-wrap.gap-4 {
+    display: none !important;
+  }
+
+  .print-hidden {
+    display: none !important;
+  }
+
+  .print-only-hint {
+    display: none !important;
+  }
+
+  .card-title {
+    margin-bottom: 0 !important;
+  }
+
+  .print-extra-margin {
+    margin-top: 16pt !important;
+  }
+
+  .instructions-header {
+    margin-bottom: 6pt !important;
+  }
+
+  .instructions-header::after {
+    content: " (mogą być kontynuowane na następnej stronie)" !important;
+    font-size: 8pt !important;
+    color: #666 !important;
+    font-style: italic !important;
+    font-weight: normal !important;
+  }
