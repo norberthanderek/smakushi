@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://smakushi.pl',
   base: '/',
+  trailingSlash: 'never',
   vite: {
     plugins: [tailwindcss()],
   },
