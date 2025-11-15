@@ -82,7 +82,7 @@ const schemas = [recipeSchema, breadcrumbSchema];
 
         <div class="flex flex-wrap gap-2 mb-4">
           {categories.map((category) => (
-            <a href={`/kategorie/${slugifyCategory(category)}`} class="badge badge-soft badge-primary badge-lg capitalize">
+            <a href={`/kategorie/${slugifyCategory(category)}`} class="badge badge-soft badge-primary badge-lg capitalize transition-transform hover:-translate-y-1">
               {category}
             </a>
           ))}
