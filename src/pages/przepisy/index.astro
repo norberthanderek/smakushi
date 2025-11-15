@@ -1,5 +1,9 @@
 ---
-import PageLayout from '../../components/PageLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import SearchModal from '../../components/SearchModal.astro';
+import Footer from '../../components/Footer.astro';
+import SEO from '../../components/SEO.astro';
 import RecipeCard from '../../components/RecipeCard.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Alert from '../../components/Alert.astro';
@@ -8,11 +12,24 @@ import { getAllRecipes } from '../../utils/recipeHelpers';
 import { pluralize } from '../../utils/pluralize';
 
 const allRecipes = await getAllRecipes();
+
+const description = `Przeglądaj wszystkie ${allRecipes.length} przepisy kulinarne w naszej kolekcji. Znajdź idealne przepisy na każdą okazję.`;
+const keywords = ['wszystkie przepisy', 'kuchnia', 'gotowanie', ...allRecipes.slice(0, 10).flatMap(r => r.data.categories)];
 ---
 
-<PageLayout title="Wszystkie przepisy">
+<BaseLayout title="Wszystkie przepisy">
+  <SEO
+    slot="seo"
+    title="Wszystkie przepisy"
+    description={description}
+    keywords={keywords}
+    type="website"
+  />
+  <Navbar />
+  <SearchModal />
+  <main class="flex-1 container mx-auto px-4 py-8 max-w-7xl">
   <Breadcrumbs items={[
-    { label: 'Główna', href: '/' },
+    { label: 'Strona główna', href: '/' },
     { label: 'Wszystkie przepisy' }
   ]} />
 
@@ -34,4 +51,6 @@ const allRecipes = await getAllRecipes();
       ))}
     </RecipeGrid>
   )}
-</PageLayout>
+  </main>
+  <Footer />
+</BaseLayout>

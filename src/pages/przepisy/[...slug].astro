@@ -1,13 +1,18 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
-import PageLayout from '../../components/PageLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import SearchModal from '../../components/SearchModal.astro';
+import Footer from '../../components/Footer.astro';
+import SEO from '../../components/SEO.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import DifficultyBadge from '../../components/DifficultyBadge.astro';
 import Icon from '../../components/Icon.astro';
 import Card from '../../components/Card.astro';
 import ImagePlaceholder from '../../components/ImagePlaceholder.astro';
 import { getAllRecipes, slugifyCategory } from '../../utils/recipeHelpers';
+import { generateRecipeSchema, generateBreadcrumbSchema } from '../../utils/seo';
 
 export async function getStaticPaths() {
   const recipes = await getAllRecipes();
@@ -24,12 +29,49 @@ interface Props {
 const { recipe } = Astro.props;
 const { Content } = await recipe.render();
 const { title, description, thumbnail, timeEstimate, prepTime, cookTime, portions, difficulty, categories, ingredients, steps, tags, nutritionalInfo } = recipe.data;
+
+const siteUrl = Astro.site?.toString() || 'https://smakushi.pl';
+const recipeSchema = generateRecipeSchema(recipe, siteUrl);
+
+const breadcrumbItems = [
+  { label: 'Strona główna', href: '/' },
+  { label: 'Przepisy', href: '/przepisy' },
+  { label: title }
+];
+const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems, siteUrl);
+
+const keywords = [
+  title,
+  ...categories,
+  ...(tags || []),
+  difficulty,
+  'przepis',
+  'kuchnia',
+  'gotowanie'
+].filter(Boolean);
+
+const imageUrl = thumbnail ? new URL(thumbnail.src, siteUrl).href : undefined;
+const schemas = [recipeSchema, breadcrumbSchema];
 ---
 
-<PageLayout title={title} maxWidth="max-w-5xl">
+<BaseLayout title={title}>
+  <SEO
+    slot="seo"
+    title={title}
+    description={description}
+    image={imageUrl}
+    imageAlt={title}
+    type="article"
+    keywords={keywords}
+    author="Smakushi"
+    schema={schemas}
+  />
+  <Navbar />
+  <SearchModal />
+  <main class="flex-1 container mx-auto px-4 py-8 max-w-5xl">
   <Breadcrumbs items={[
-    { label: 'Główna', href: '/' },
-    { label: 'Przepisy', href: '/recipes' },
+    { label: 'Strona główna', href: '/' },
+    { label: 'Przepisy', href: '/przepisy' },
     { label: title }
   ]} />
 
@@ -40,7 +82,7 @@ const { title, description, thumbnail, timeEstimate, prepTime, cookTime, portion
 
         <div class="flex flex-wrap gap-2 mb-4">
           {categories.map((category) => (
-            <a href={`/categories/${slugifyCategory(category)}`} class="badge badge-soft badge-primary badge-lg capitalize">
+            <a href={`/kategorie/${slugifyCategory(category)}`} class="badge badge-soft badge-primary badge-lg capitalize">
               {category}
             </a>
           ))}
@@ -205,7 +247,7 @@ const { title, description, thumbnail, timeEstimate, prepTime, cookTime, portion
       <div class="divider"></div>
 
       <div class="flex flex-wrap gap-4 justify-between items-center mt-6">
-        <a href="/recipes" class="btn btn-ghost">
+        <a href="/przepisy" class="btn btn-ghost">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
@@ -227,4 +269,6 @@ const { title, description, thumbnail, timeEstimate, prepTime, cookTime, portion
         </div>
       </div>
     </article>
-</PageLayout>
+  </main>
+  <Footer />
+</BaseLayout>

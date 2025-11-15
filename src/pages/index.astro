@@ -1,5 +1,9 @@
 ---
-import PageLayout from '../components/PageLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import SearchModal from '../components/SearchModal.astro';
+import Footer from '../components/Footer.astro';
+import SEO from '../components/SEO.astro';
 import RecipeCard from '../components/RecipeCard.astro';
 import Icon from '../components/Icon.astro';
 import Alert from '../components/Alert.astro';
@@ -9,9 +13,22 @@ import { getAllRecipes, extractCategories, slugifyCategory } from '../utils/reci
 const allRecipes = await getAllRecipes();
 const featuredRecipes = allRecipes.filter(recipe => recipe.data.featured);
 const allCategories = extractCategories(allRecipes);
+
+const description = 'Odkryj pyszne przepisy kulinarne tworzone przez bliskich. Przeglądaj według kategorii, szukaj ulubionych dań i dziel się swoją pasją do gotowania.';
+const keywords = ['przepisy', 'kuchnia', 'gotowanie', 'jedzenie', 'smakushi', ...allCategories];
 ---
 
-<PageLayout title="Strona główna">
+<BaseLayout title="Strona główna">
+  <SEO
+    slot="seo"
+    title="Strona główna"
+    description={description}
+    keywords={keywords}
+    type="website"
+  />
+  <Navbar />
+  <SearchModal />
+  <main class="flex-1 container mx-auto px-4 py-8 max-w-7xl">
   <div class="hero min-h-[500px] mb-16">
       <div class="hero-content text-center">
         <div class="max-w-2xl">
@@ -22,7 +39,7 @@ const allCategories = extractCategories(allRecipes);
             Odkryj przepisy tworzone przez bliskich.
           </p>
           <div class="flex gap-4 justify-center flex-wrap">
-            <a href="/recipes" class="btn btn-secondary btn-lg">
+            <a href="/przepisy" class="btn btn-secondary btn-lg">
               Przeglądaj wszystkie
               <Icon name="arrow-right" class="h-5 w-5" />
             </a>
@@ -41,7 +58,7 @@ const allCategories = extractCategories(allRecipes);
       <h2 class="text-4xl font-bold mb-8">Przeglądaj według kategorii</h2>
       <div class="flex flex-wrap gap-3">
         {allCategories.map((category) => (
-          <a href={`/categories/${slugifyCategory(category)}`} class="btn btn-soft btn-secondary capitalize">
+          <a href={`/kategorie/${slugifyCategory(category)}`} class="btn btn-soft btn-secondary capitalize">
             {category}
           </a>
         ))}
@@ -53,7 +70,7 @@ const allCategories = extractCategories(allRecipes);
     <section>
       <div class="flex justify-between items-center mb-8">
         <h2 class="text-4xl font-bold">Wyróżnione przepisy</h2>
-        <a href="/recipes" class="btn btn-ghost">
+        <a href="/przepisy" class="btn btn-ghost">
           Zobacz wszystkie
           <Icon name="arrow-right" class="h-5 w-5" />
         </a>
@@ -69,4 +86,6 @@ const allCategories = extractCategories(allRecipes);
         </RecipeGrid>
       )}
     </section>
-</PageLayout>
+  </main>
+  <Footer />
+</BaseLayout>

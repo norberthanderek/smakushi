@@ -6,17 +6,19 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'Discover and share delicious recipes' } = Astro.props;
+const { title, description = 'Odkryj i dziel się pysznymi przepisami kulinarnymi' } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="pastel">
+<html lang="pl" data-theme="pastel">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Smakushi</title>
+    <slot name="seo">
+      <title>{title} | Smakushi</title>
+      <meta name="description" content={description} />
+    </slot>
   </head>
   <body class="bg-base-100">
     <div class="drawer">

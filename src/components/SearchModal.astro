@@ -120,7 +120,7 @@ const recipesData = allRecipes.map(recipe => ({
       resultsContainer.classList.remove('flex-1', 'flex', 'items-center', 'justify-center');
 
       searchResults.innerHTML = results.map(recipe => `
-        <a href="/recipes/${recipe.slug}" class="block border-b border-base-300 px-4 py-3 hover:bg-base-200/50 hover:shadow-md transition-all duration-200 lg:px-6">
+        <a href="/przepisy/${recipe.slug}" class="block border-b border-base-300 px-4 py-3 hover:bg-base-200/50 hover:shadow-md transition-all duration-200 lg:px-6">
           <h4 class="font-semibold text-base lg:text-lg mb-1">${recipe.title}</h4>
           <p class="text-sm text-base-content/70 mb-2">${recipe.description}</p>
           <div class="flex gap-2 flex-wrap">

@@ -1,5 +1,9 @@
 ---
-import PageLayout from '../../components/PageLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import SearchModal from '../../components/SearchModal.astro';
+import Footer from '../../components/Footer.astro';
+import SEO from '../../components/SEO.astro';
 import RecipeCard from '../../components/RecipeCard.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import RecipeGrid from '../../components/RecipeGrid.astro';
@@ -22,12 +26,25 @@ export async function getStaticPaths() {
 const { category } = Astro.params;
 const { recipes, categoryName } = Astro.props;
 const capitalizedCategory = categoryName ? categoryName.charAt(0).toUpperCase() + categoryName.slice(1) : '';
+
+const description = `Przeglądaj ${recipes.length} ${pluralize(recipes.length, 'recipe')} w kategorii ${categoryName}. Znajdź inspiracje na pyszne posiłki.`;
+const keywords = [categoryName, 'przepisy', 'kuchnia', 'gotowanie', ...recipes.slice(0, 5).map(r => r.data.title)];
 ---
 
-<PageLayout title={`${capitalizedCategory} Recipes`}>
+<BaseLayout title={`${capitalizedCategory} - Przepisy`}>
+  <SEO
+    slot="seo"
+    title={`${capitalizedCategory} - Przepisy`}
+    description={description}
+    keywords={keywords}
+    type="website"
+  />
+  <Navbar />
+  <SearchModal />
+  <main class="flex-1 container mx-auto px-4 py-8 max-w-7xl">
   <Breadcrumbs items={[
-    { label: 'Główna', href: '/' },
-    { label: 'Kategorie', href: '/categories' },
+    { label: 'Strona główna', href: '/' },
+    { label: 'Kategorie', href: '/kategorie' },
     { label: capitalizedCategory }
   ]} />
 
@@ -45,4 +62,6 @@ const capitalizedCategory = categoryName ? categoryName.charAt(0).toUpperCase() 
       <RecipeCard recipe={recipe} />
     ))}
   </RecipeGrid>
-</PageLayout>
+  </main>
+  <Footer />
+</BaseLayout>
