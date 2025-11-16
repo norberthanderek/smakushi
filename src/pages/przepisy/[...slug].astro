@@ -101,15 +101,19 @@ const schemas = [recipeSchema, breadcrumbSchema];
       <div class="divider"></div>
 
       <div class="card bg-base-200 shadow-sm mb-10 overflow-hidden">
-        <figure>
+        <figure class="relative">
           {thumbnail ? (
-            <Image
-              src={thumbnail}
-              alt={title}
-              width={1200}
-              height={400}
-              class="w-full h-[400px] object-cover"
-            />
+            <>
+              <div id="recipe-hero-skeleton" class="skeleton h-[400px] w-full absolute inset-0 z-0"></div>
+              <Image
+                src={thumbnail}
+                alt={title}
+                width={1200}
+                height={400}
+                class="w-full h-[400px] object-cover relative z-10 opacity-0 transition-opacity duration-300"
+                onload="const img = this; img.classList.remove('opacity-0'); img.classList.add('opacity-100'); document.getElementById('recipe-hero-skeleton')?.remove();"
+              />
+            </>
           ) : (
             <ImagePlaceholder width="100%" height="400" class="bg-base-200" />
           )}

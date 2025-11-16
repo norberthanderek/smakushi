@@ -33,16 +33,20 @@ const displayTime = prepTime && cookTime
   href={`/przepisy/${recipe.slug}`}
   class="card bg-base-100 shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] cursor-pointer"
 >
-  <figure>
+  <figure class="relative">
     {thumbnail ? (
-      <Image
-        src={thumbnail}
-        alt={title}
-        width={400}
-        height={250}
-        class="w-full h-[250px] object-cover"
-        loading="lazy"
-      />
+      <>
+        <div id={`skeleton-${recipe.slug}`} class="skeleton h-[250px] w-full absolute inset-0 z-0"></div>
+        <Image
+          src={thumbnail}
+          alt={title}
+          width={400}
+          height={250}
+          class="w-full h-[250px] object-cover relative z-10 opacity-0 transition-opacity duration-300"
+          loading="lazy"
+          onload={`const img = this; img.classList.remove('opacity-0'); img.classList.add('opacity-100'); document.getElementById('skeleton-${recipe.slug}')?.remove();`}
+        />
+      </>
     ) : (
       <ImagePlaceholder width="400" height="250" class="w-full bg-base-200" />
     )}
