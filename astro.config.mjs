@@ -7,6 +7,9 @@ export default defineConfig({
   site: 'https://smakushi.pl',
   base: '/',
   trailingSlash: 'never',
+  build: {
+    format: 'file'
+  },
   vite: {
     plugins: [tailwindcss()],
   },
